@@ -22,6 +22,10 @@ class Review
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Recipe $recipe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +51,18 @@ class Review
     public function setContent(string $content): static
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getRecipe(): ?Recipe
+    {
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): static
+    {
+        $this->recipe = $recipe;
 
         return $this;
     }

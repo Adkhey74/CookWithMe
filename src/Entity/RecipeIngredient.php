@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RecipeIngredientRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeIngredientRepository::class)]
@@ -17,63 +15,23 @@ class RecipeIngredient
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @var Collection<int, Recipe>
-     */
-    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'recipeIngredient')]
-    private Collection $recipe_id;
-
     #[ORM\Column]
     private ?int $quantity = null;
 
     #[ORM\Column(length: 255)]
     private ?string $unit = null;
 
-    /**
-     * @var Collection<int, Ingredient>
-     */
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recipeIngredient')]
-    private Collection $ingredient_id;
+    #[ORM\ManyToOne(inversedBy: 'recipe_ingredient')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Recipe $recipe = null;
 
-    public function __construct()
-    {
-        $this->recipe_id = new ArrayCollection();
-        $this->ingredient_id = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'ingredient_recipe')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Ingredient $ingredient = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, Recipe>
-     */
-    public function getRecipeId(): Collection
-    {
-        return $this->recipe_id;
-    }
-
-    public function addRecipeId(Recipe $recipeId): static
-    {
-        if (!$this->recipe_id->contains($recipeId)) {
-            $this->recipe_id->add($recipeId);
-            $recipeId->setRecipeIngredient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRecipeId(Recipe $recipeId): static
-    {
-        if ($this->recipe_id->removeElement($recipeId)) {
-            // set the owning side to null (unless already changed)
-            if ($recipeId->getRecipeIngredient() === $this) {
-                $recipeId->setRecipeIngredient(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getQuantity(): ?int
@@ -100,32 +58,26 @@ class RecipeIngredient
         return $this;
     }
 
-    /**
-     * @return Collection<int, Ingredient>
-     */
-    public function getIngredientId(): Collection
+    public function getRecipeId(): ?Recipe
     {
-        return $this->ingredient_id;
+        return $this->recipe;
     }
 
-    public function addIngredientId(Ingredient $ingredientId): static
+    public function setRecipeId(?Recipe $recipe): static
     {
-        if (!$this->ingredient_id->contains($ingredientId)) {
-            $this->ingredient_id->add($ingredientId);
-            $ingredientId->setRecipeIngredient($this);
-        }
+        $this->recipe = $recipe;
 
         return $this;
     }
 
-    public function removeIngredientId(Ingredient $ingredientId): static
+    public function getIngredientId(): ?Ingredient
     {
-        if ($this->ingredient_id->removeElement($ingredientId)) {
-            // set the owning side to null (unless already changed)
-            if ($ingredientId->getRecipeIngredient() === $this) {
-                $ingredientId->setRecipeIngredient(null);
-            }
-        }
+        return $this->ingredient;
+    }
+
+    public function setIngredientId(?Ingredient $ingredient): static
+    {
+        $this->ingredient = $ingredient;
 
         return $this;
     }
