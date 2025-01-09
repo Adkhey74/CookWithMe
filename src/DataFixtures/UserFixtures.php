@@ -19,12 +19,13 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $users = [
-            ['email' => 'admin@example.com', 'password' => 'password123', 'roles' => ['ROLE_ADMIN']],
-            ['email' => 'user@example.com', 'password' => 'password123', 'roles' => ['ROLE_USER']],
+            ['name' => 'User1', 'email' => 'admin@example.com', 'password' => 'password123', 'roles' => ['ROLE_ADMIN']],
+            ['name' => 'User2', 'email' => 'user@example.com', 'password' => 'password123', 'roles' => ['ROLE_USER']],
         ];
 
         foreach ($users as $key => $userData) {
             $user = new User();
+            $user->setName($userData['name']);
             $user->setEmail($userData['email']);
             $user->setRoles($userData['roles']);
             $hashedPassword = $this->passwordHasher->hashPassword($user, $userData['password']);

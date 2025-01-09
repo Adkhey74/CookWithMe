@@ -33,15 +33,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
     /**
-     * @var Collection<int, Recipe>
+     * @var Collection<int, ApiToken>
      */
-    #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'author')]
-    private Collection $recipes;
+    #[ORM\OneToMany(targetEntity: ApiToken::class, mappedBy: 'user')]
+    private Collection $apiTokens;
 
     public function __construct()
     {
-        $this->recipes = new ArrayCollection();
+        $this->apiTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,6 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
+     *
      * @return list<string>
      */
     public function getRoles(): array
@@ -118,30 +122,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Recipe>
-     */
-    public function getRecipes(): Collection
+    public function getName(): ?string
     {
-        return $this->recipes;
+        return $this->name;
     }
 
-    public function addRecipe(Recipe $recipe): static
+    public function setName(string $name): static
     {
-        if (!$this->recipes->contains($recipe)) {
-            $this->recipes->add($recipe);
-            $recipe->setAuthor($this);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ApiToken>
+     */
+    public function getApiTokens(): Collection
+    {
+        return $this->apiTokens;
+    }
+
+    public function addApiToken(ApiToken $apiToken): static
+    {
+        if (!$this->apiTokens->contains($apiToken)) {
+            $this->apiTokens->add($apiToken);
+            $apiToken->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeRecipe(Recipe $recipe): static
+    public function removeApiToken(ApiToken $apiToken): static
     {
-        if ($this->recipes->removeElement($recipe)) {
+        if ($this->apiTokens->removeElement($apiToken)) {
             // set the owning side to null (unless already changed)
-            if ($recipe->getAuthor() === $this) {
-                $recipe->setAuthor(null);
+            if ($apiToken->getUser() === $this) {
+                $apiToken->setUser(null);
             }
         }
 
