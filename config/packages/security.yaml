@@ -1,19 +1,13 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
-        api_token_provider:
-            entity:
-                class: App\Entity\ApiToken
-                property: token
-        # used to reload user from session & other features (e.g. switch_user)
+
     firewalls:
         main:
             lazy: true
@@ -21,32 +15,26 @@ security:
             form_login:
                 login_path: /login
                 check_path: /login
+            # Ce firewall gère uniquement les routes non-API
+            pattern: ^/(?!api)
+
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: app_user_provider
             json_login:
                 check_path: /api/login
                 username_path: email
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-        api:
-            pattern: ^/api/
-            stateless: true
-            provider: api_token_provider
-            custom_authenticator: App\Security\ApiTokenAuthenticator
-            jwt: ~ # Utilise l'authentification JWT ici
+            jwt: ~ # LexikJWT pour l'authentification des autres endpoints
 
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/signup, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+
 
 
 when@test:

@@ -38,9 +38,10 @@ class AuthController
     {
         $data = json_decode($request->getContent(), true);
 
-        $name = $data['name'] ?? null;
-        $email = $data['email'] ?? null;
-        $password = $data['password'] ?? null;
+        $lastName = $data['lastName'];
+        $firstName = $data['firstName'];
+        $email = $data['email'];
+        $password = $data['password'];
 
         if (!$email || !$password) {
             return new JsonResponse(['message' => 'Email et mot de passe sont requis.'], Response::HTTP_BAD_REQUEST);
@@ -52,7 +53,8 @@ class AuthController
         }
 
         $user = new User();
-        $user->setName($name);
+        $user->setLastName($lastName);
+        $user->setFirstName($firstName);
         $user->setEmail($email);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 

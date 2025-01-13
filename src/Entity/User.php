@@ -33,14 +33,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
     /**
      * @var Collection<int, ApiToken>
      */
     #[ORM\OneToMany(targetEntity: ApiToken::class, mappedBy: 'user')]
     private Collection $apiTokens;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $firstName = null;
 
     public function __construct()
     {
@@ -122,18 +125,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, ApiToken>
      */
@@ -160,6 +151,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $apiToken->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
 
         return $this;
     }
