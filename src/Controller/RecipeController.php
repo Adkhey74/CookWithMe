@@ -41,4 +41,17 @@ class RecipeController extends AbstractController
 
         return new JsonResponse($recipes, JsonResponse::HTTP_OK);
     }
+
+
+    #[Route('/api/recipes/by-user/{userId}', name: 'get_recipes_by_category', methods: ['GET'])]
+    public function getRecipesByUser(int $userId, RecipeRepository $recipeRepository): JsonResponse
+    {
+        $recipes = $recipeRepository->findBy(['author' => $userId]);
+
+        if (!$recipes) {
+            return new JsonResponse(['error' => 'No recipes found for the given user.'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
+    }
 }
