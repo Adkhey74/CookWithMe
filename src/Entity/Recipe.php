@@ -2,21 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
 
 
-use App\Controller\RecipeController;
 use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ApiResource]
-
-#[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: [
+    'name' => 'partial',
+    'category' => 'exact',
+    'author' => 'exact'
+])]
 class Recipe
 {
     #[ORM\Id]
