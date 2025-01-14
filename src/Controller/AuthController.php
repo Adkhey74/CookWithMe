@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class AuthController
 {
@@ -27,45 +28,35 @@ class AuthController
         $this->jwtManager = $jwtManager;
     }
 
-    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
-    public function login(): JsonResponse
-    {
-        return new JsonResponse(['message' => 'Login endpoint handled by json_login']);
-    }
-
     #[Route('/api/signup', name: 'api_signup', methods: ['POST'])]
     public function signup(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        $lastName = $data['lastName'];
-        $firstName = $data['firstName'];
-        $email = $data['email'];
-        $password = $data['password'];
-
-        if (!$email || !$password) {
-            return new JsonResponse(['message' => 'Email et mot de passe sont requis.'], Response::HTTP_BAD_REQUEST);
+        if (empty($data['email']) || empty($data['password']) || empty($data['firstName']) || empty($data['lastName'])) {
+            return new JsonResponse(['message' => 'all field are required'], Response::HTTP_BAD_REQUEST);
         }
 
-        $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-        if ($existingUser) {
-            return new JsonResponse(['message' => 'Un utilisateur avec cet email existe déjà.'], Response::HTTP_CONFLICT);
+        if ($this->entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']])) {
+            return new JsonResponse(['message' => 'Email already exist.'], Response::HTTP_CONFLICT);
         }
 
-        $user = new User();
-        $user->setLastName($lastName);
-        $user->setFirstName($firstName);
-        $user->setEmail($email);
-        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
-
+        $user = (new User())
+            ->setLastName($data['lastName'])
+            ->setFirstName($data['firstName'])
+            ->setEmail($data['email'])
+            ->setPassword($this->passwordHasher->hashPassword(new User(), $data['password']));
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         $token = $this->jwtManager->create($user);
 
-        return new JsonResponse([
-            'message' => 'Inscription réussie.',
-            'token' => $token
-        ], Response::HTTP_CREATED);
+        $response = new JsonResponse(['message' => 'success'], Response::HTTP_CREATED);
+        $response->headers->setCookie(Cookie::create('BEARER', $token)
+            ->withHttpOnly(true)
+            ->withSecure(true)
+            ->withSameSite('Strict'));
+
+        return $response;
     }
 }

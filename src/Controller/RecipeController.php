@@ -15,7 +15,6 @@ class RecipeController extends AbstractController
     #[Route('/api/recipes/search', name: 'search_recipes', methods: ['POST'])]
     public function search(Request $request, RecipeRepository $recipeRepository): JsonResponse
     {
-        // Récupérer les paramètres du corps de la requête
         $data = json_decode($request->getContent(), true);
 
         $keyword = $data['keyword'] ?? null;
@@ -26,8 +25,19 @@ class RecipeController extends AbstractController
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        // Recherche des recettes par le mot-clé
         $recipes = $recipeRepository->findByKeyword($keyword);
+
+        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
+    }
+
+    #[Route('/api/recipes/by-category/{categoryId}', name: 'get_recipes_by_category', methods: ['GET'])]
+    public function getRecipesByCategory(int $categoryId, RecipeRepository $recipeRepository): JsonResponse
+    {
+        $recipes = $recipeRepository->findBy(['category' => $categoryId]);
+
+        if (!$recipes) {
+            return new JsonResponse(['error' => 'No recipes found for the given category.'], JsonResponse::HTTP_NOT_FOUND);
+        }
 
         return new JsonResponse($recipes, JsonResponse::HTTP_OK);
     }
