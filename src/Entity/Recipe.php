@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 
 
 use App\Controller\RecipeController;
@@ -16,15 +16,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ApiResource]
 
-#[ApiResource(
-    operations: [
-        new Post(
-            name: 'searchRecipe',
-            uriTemplate: 'recipes/search',
-            controller: RecipeController::class
-        )
-    ]
-)]
 class Recipe
 {
     #[ORM\Id]
@@ -67,10 +58,17 @@ class Recipe
     #[ORM\OneToMany(targetEntity: RecipeIngredient::class, mappedBy: 'recipe_id', orphanRemoval: true)]
     private Collection $recipe_ingredient;
 
+    /**
+     * @var Collection<int, Step>
+     */
+    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'recipeId')]
+    private Collection $steps;
+
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
         $this->recipe_ingredient = new ArrayCollection();
+        $this->steps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,6 +203,36 @@ class Recipe
             // set the owning side to null (unless already changed)
             if ($recipeIngredient->getRecipeId() === $this) {
                 $recipeIngredient->setRecipeId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Step>
+     */
+    public function getSteps(): Collection
+    {
+        return $this->steps;
+    }
+
+    public function addStep(Step $step): static
+    {
+        if (!$this->steps->contains($step)) {
+            $this->steps->add($step);
+            $step->setRecipeId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStep(Step $step): static
+    {
+        if ($this->steps->removeElement($step)) {
+            // set the owning side to null (unless already changed)
+            if ($step->getRecipeId() === $this) {
+                $step->setRecipeId(null);
             }
         }
 
