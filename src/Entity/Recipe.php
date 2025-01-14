@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ApiResource]
 
+#[ApiResource]
 class Recipe
 {
     #[ORM\Id]
@@ -55,7 +56,7 @@ class Recipe
     /**
      * @var Collection<int, RecipeIngredient>
      */
-    #[ORM\OneToMany(targetEntity: RecipeIngredient::class, mappedBy: 'recipe_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RecipeIngredient::class, mappedBy: 'recipe', orphanRemoval: true)]
     private Collection $recipe_ingredient;
 
     /**
