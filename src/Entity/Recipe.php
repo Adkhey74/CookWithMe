@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 
 
@@ -42,11 +43,12 @@ class Recipe
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
-
+    #[ApiProperty(readableLink: false, writableLink: true)]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiProperty(readableLink: false, writableLink: true)]
     private ?User $author = null;
 
     /**
@@ -64,8 +66,9 @@ class Recipe
     /**
      * @var Collection<int, Step>
      */
-    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'recipeId')]
+    #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'recipeId', cascade: ['persist'], orphanRemoval: true)]
     private Collection $steps;
+
 
     public function __construct()
     {

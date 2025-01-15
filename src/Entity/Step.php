@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\StepRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StepRepository::class)]
+
 class Step
 {
     #[ORM\Id]
@@ -15,6 +17,7 @@ class Step
 
     #[ORM\ManyToOne(inversedBy: 'steps')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiProperty(readableLink: false, writableLink: true)]
     private ?Recipe $recipeId = null;
 
     #[ORM\Column(length: 255)]
