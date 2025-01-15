@@ -14,7 +14,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage: 6,
+)]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
     'category' => 'exact',
@@ -69,12 +71,19 @@ class Recipe
     #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'recipeId', cascade: ['persist'], orphanRemoval: true)]
     private Collection $steps;
 
+    /**
+     * @var Collection<int, UserLike>
+     */
+    #[ORM\OneToMany(targetEntity: UserLike::class, mappedBy: 'recipe')]
+    private Collection $userLikes;
+
 
     public function __construct()
     {
         $this->reviews = new ArrayCollection();
         $this->recipe_ingredient = new ArrayCollection();
         $this->steps = new ArrayCollection();
+        $this->userLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -239,6 +248,36 @@ class Recipe
             // set the owning side to null (unless already changed)
             if ($step->getRecipeId() === $this) {
                 $step->setRecipeId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLike>
+     */
+    public function getUserLikes(): Collection
+    {
+        return $this->userLikes;
+    }
+
+    public function addUserLike(UserLike $userLike): static
+    {
+        if (!$this->userLikes->contains($userLike)) {
+            $this->userLikes->add($userLike);
+            $userLike->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserLike(UserLike $userLike): static
+    {
+        if ($this->userLikes->removeElement($userLike)) {
+            // set the owning side to null (unless already changed)
+            if ($userLike->getRecipe() === $this) {
+                $userLike->setRecipe(null);
             }
         }
 

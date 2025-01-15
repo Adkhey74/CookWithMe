@@ -2,56 +2,28 @@
 
 namespace App\Controller;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RecipeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RecipeController extends AbstractController
 {
-    #[Route('/api/recipes/search', name: 'search_recipes', methods: ['POST'])]
-    public function search(Request $request, RecipeRepository $recipeRepository): JsonResponse
+    #[Route('/api/top-liked-recipes', name: 'api_top_liked_recipes', methods: ['GET'])]
+    public function __invoke(RecipeRepository $recipeRepository): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $recipes = $recipeRepository->findTopLikedRecipes();
 
-        $keyword = $data['keyword'] ?? null;
-
-        if (!$keyword) {
-            return new JsonResponse([
-                'error' => 'Keyword is required for search.'
-            ], JsonResponse::HTTP_BAD_REQUEST);
+        $data = [];
+        foreach ($recipes as $recipe) {
+            $data[] = [
+                'id' => $recipe->getId(),
+                'name' => $recipe->getName(),
+                'nbLikes' => $recipe->getNbLikes(),
+                'createdAt' => $recipe->getCreatedAt()->format('Y-m-d H:i:s'),
+            ];
         }
 
-        $recipes = $recipeRepository->findByKeyword($keyword);
-
-        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
-    }
-
-    #[Route('/api/recipes/by-category/{categoryId}', name: 'get_recipes_by_category', methods: ['GET'])]
-    public function getRecipesByCategory(int $categoryId, RecipeRepository $recipeRepository): JsonResponse
-    {
-        $recipes = $recipeRepository->findBy(['category' => $categoryId]);
-
-        if (!$recipes) {
-            return new JsonResponse(['error' => 'No recipes found for the given category.'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
-    }
-
-
-    #[Route('/api/recipes/by-user/{userId}', name: 'get_recipes_by_category', methods: ['GET'])]
-    public function getRecipesByUser(int $userId, RecipeRepository $recipeRepository): JsonResponse
-    {
-        $recipes = $recipeRepository->findBy(['author' => $userId]);
-
-        if (!$recipes) {
-            return new JsonResponse(['error' => 'No recipes found for the given user.'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        return new JsonResponse($recipes, JsonResponse::HTTP_OK);
+        return new JsonResponse($data, 200);
     }
 }

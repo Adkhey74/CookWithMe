@@ -11,6 +11,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource]
+
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource]
 
@@ -48,9 +50,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
+    /**
+     * @var Collection<int, UserLike>
+     */
+    #[ORM\OneToMany(targetEntity: UserLike::class, mappedBy: 'user')]
+    private Collection $userLikes;
+
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
+        $this->userLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +187,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLike>
+     */
+    public function getUserLikes(): Collection
+    {
+        return $this->userLikes;
+    }
+
+    public function addUserLike(UserLike $userLike): static
+    {
+        if (!$this->userLikes->contains($userLike)) {
+            $this->userLikes->add($userLike);
+            $userLike->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserLike(UserLike $userLike): static
+    {
+        if ($this->userLikes->removeElement($userLike)) {
+            // set the owning side to null (unless already changed)
+            if ($userLike->getUser() === $this) {
+                $userLike->setUser(null);
+            }
+        }
 
         return $this;
     }

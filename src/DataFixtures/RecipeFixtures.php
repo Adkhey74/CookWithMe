@@ -37,7 +37,7 @@ class RecipeFixtures extends Fixture
         }
 
         // Création de 20 recettes fictives
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 200; $i++) {
             $recipe = new Recipe();
             $recipe->setName('Recipe ' . $i);
             $recipe->setNbLikes(rand(0, 100));  // Nombre de likes aléatoire
