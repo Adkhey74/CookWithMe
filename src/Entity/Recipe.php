@@ -77,6 +77,12 @@ class Recipe
     #[ORM\OneToMany(targetEntity: UserLike::class, mappedBy: 'recipe')]
     private Collection $userLikes;
 
+    /**
+     * @var Collection<int, RecipeImage>
+     */
+    #[ORM\OneToMany(targetEntity: RecipeImage::class, mappedBy: 'recipe', orphanRemoval: true)]
+    private Collection $recipeImages;
+
 
     public function __construct()
     {
@@ -84,6 +90,7 @@ class Recipe
         $this->recipe_ingredient = new ArrayCollection();
         $this->steps = new ArrayCollection();
         $this->userLikes = new ArrayCollection();
+        $this->recipeImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -278,6 +285,36 @@ class Recipe
             // set the owning side to null (unless already changed)
             if ($userLike->getRecipe() === $this) {
                 $userLike->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecipeImage>
+     */
+    public function getRecipeImages(): Collection
+    {
+        return $this->recipeImages;
+    }
+
+    public function addRecipeImage(RecipeImage $recipeImage): static
+    {
+        if (!$this->recipeImages->contains($recipeImage)) {
+            $this->recipeImages->add($recipeImage);
+            $recipeImage->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipeImage(RecipeImage $recipeImage): static
+    {
+        if ($this->recipeImages->removeElement($recipeImage)) {
+            // set the owning side to null (unless already changed)
+            if ($recipeImage->getRecipe() === $this) {
+                $recipeImage->setRecipe(null);
             }
         }
 
