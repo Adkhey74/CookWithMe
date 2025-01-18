@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\StepRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: StepRepository::class)]
 
@@ -21,12 +22,15 @@ class Step
     private ?Recipe $recipeId = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?string $number = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?string $content = null;
 
     public function getId(): ?int

@@ -7,7 +7,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\OpenApi\Model;
 use App\Repository\RecipeImageRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,8 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             outputFormats: ['jsonld' => ['application/ld+json']],
             inputFormats: ['multipart' => ['multipart/form-data']],
-        )
-    ]
+        ),
+    ],
 )]
 class RecipeImage
 {

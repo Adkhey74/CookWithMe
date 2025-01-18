@@ -10,21 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['category:read']],
+    denormalizationContext: ['groups' => ['category:write']]
+)]
 class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['category:read', 'recipe:read', 'recipe:write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['category:read', 'category:write', 'recipe:read', 'recipe:write'])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, Recipe>
      */
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: 'category')]
+    #[Groups(['category:read'])]
     private Collection $recipes;
 
     public function __construct()
@@ -70,7 +76,7 @@ class Category
     public function removeRecipe(Recipe $recipe): static
     {
         if ($this->recipes->removeElement($recipe)) {
-            // set the owning side to null (unless already changed)
+            // Définir la relation inverse sur null si nécessaire
             if ($recipe->getCategory() === $this) {
                 $recipe->setCategory(null);
             }

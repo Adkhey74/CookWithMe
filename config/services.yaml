@@ -27,6 +27,13 @@ services:
     App\EventListener\ResponseListener:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    App\EventListener\RecipeImageListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preRemove }
 
+    App\State\Processor\RecipeImageProcessor:
+        arguments:
+            $uploadHandler: '@vich_uploader.upload_handler'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

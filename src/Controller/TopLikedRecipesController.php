@@ -7,9 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class RecipeController extends AbstractController
+class TopLikedRecipesController extends AbstractController
 {
-    #[Route('/api/top-liked-recipes', name: 'api_top_liked_recipes', methods: ['GET'])]
     public function __invoke(RecipeRepository $recipeRepository): JsonResponse
     {
         $recipes = $recipeRepository->findTopLikedRecipes();

@@ -6,16 +6,36 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-
-
+use App\Controller\RecipeController;
 use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\Controller\TopLikedRecipesController;
+use App\Controller\UserLikeController;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ApiResource(
+    normalizationContext: ['groups' => ['recipe:read']],
+    denormalizationContext: ['groups' => ['recipe:write']],
     paginationItemsPerPage: 6,
+    operations: [
+        new GetCollection(),
+        new Get(
+            uriTemplate: '/recipes/{id}',
+            controller: UserLikeController::class . '::getRecipeWithLikeInfo',
+        ),
+        new Post(),
+        new Get(
+            uriTemplate: '/top-liked-recipes',
+            controller: TopLikedRecipesController::class,
+            outputFormats: ['json' => ['application/json']],
+        ),
+    ],
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
@@ -27,30 +47,38 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['recipe:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?int $nbLikes = null;
 
     #[ORM\Column]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-
+    #[Groups(['recipe:read'])]
+    private ?bool $isLikedByCurrentUser = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
     #[ApiProperty(readableLink: false, writableLink: true)]
+    #[Groups(['recipe:write'])]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
     #[ApiProperty(readableLink: false, writableLink: true)]
+    #[Groups(['recipe:write'])]
     private ?User $author = null;
 
     /**
@@ -69,6 +97,7 @@ class Recipe
      * @var Collection<int, Step>
      */
     #[ORM\OneToMany(targetEntity: Step::class, mappedBy: 'recipeId', cascade: ['persist'], orphanRemoval: true)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private Collection $steps;
 
     /**
@@ -82,7 +111,6 @@ class Recipe
      */
     #[ORM\OneToMany(targetEntity: RecipeImage::class, mappedBy: 'recipe', orphanRemoval: true)]
     private Collection $recipeImages;
-
 
     public function __construct()
     {
@@ -317,6 +345,18 @@ class Recipe
                 $recipeImage->setRecipe(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsLikedByCurrentUser(): ?bool
+    {
+        return $this->isLikedByCurrentUser;
+    }
+
+    public function setIsLikedByCurrentUser(?bool $isLikedByCurrentUser): static
+    {
+        $this->isLikedByCurrentUser = $isLikedByCurrentUser;
 
         return $this;
     }
