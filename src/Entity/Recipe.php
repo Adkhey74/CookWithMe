@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\TopLikedRecipesController;
 use App\Controller\UserLikeController;
@@ -30,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             controller: UserLikeController::class . '::getRecipeWithLikeInfo',
         ),
         new Post(),
+        new Patch(),
         new Get(
             uriTemplate: '/top-liked-recipes',
             controller: TopLikedRecipesController::class,
@@ -71,8 +73,8 @@ class Recipe
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[ApiProperty(readableLink: false, writableLink: true)]
-    #[Groups(['recipe:write'])]
+    #[ApiProperty(readableLink: true, writableLink: true)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
@@ -110,6 +112,7 @@ class Recipe
      * @var Collection<int, RecipeImage>
      */
     #[ORM\OneToMany(targetEntity: RecipeImage::class, mappedBy: 'recipe', orphanRemoval: true)]
+    #[Groups(['recipe:read', 'recipe:write'])]
     private Collection $recipeImages;
 
     public function __construct()

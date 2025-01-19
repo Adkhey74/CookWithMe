@@ -7,6 +7,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Repository\RecipeImageRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             outputFormats: ['jsonld' => ['application/ld+json']],
             inputFormats: ['multipart' => ['multipart/form-data']],
         ),
+        new Get()
     ],
 )]
 class RecipeImage
@@ -41,10 +43,11 @@ class RecipeImage
 
     #[Vich\UploadableField(mapping: 'recipe_images', fileNameProperty: 'filePath')]
     #[Assert\NotNull, Assert\Image]
-    #[Groups(['recipe_image:write'])]
+    #[Groups(['recipe_image:write', 'recipe:read'])]
     public ?File $file = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['recipe:read'])]
     public ?string $filePath = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
