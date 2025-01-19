@@ -23,7 +23,7 @@ class Ingredient
     /**
      * @var Collection<int, RecipeIngredient>
      */
-    #[ORM\OneToMany(targetEntity: RecipeIngredient::class, mappedBy: 'ingredient_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RecipeIngredient::class, mappedBy: 'ingredient', orphanRemoval: true)]
     private Collection $ingredient_recipe;
 
     public function __construct()
@@ -78,6 +78,4 @@ class Ingredient
 
         return $this;
     }
-
-
 }
