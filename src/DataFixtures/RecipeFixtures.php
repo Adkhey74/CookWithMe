@@ -44,15 +44,16 @@ class RecipeFixtures extends Fixture
             $recipe->setCreatedAt(new \DateTimeImmutable('now'));  // Date actuelle
             $recipe->setUpdatedAt(rand(0, 1) ? new \DateTimeImmutable('now') : null);  // Date de mise à jour aléatoire
 
-        //     // Attribution aléatoire d'une catégorie et d'un auteur
-        //     $recipe->setCategory($categories[array_rand($categories)]);
-        //     $recipe->setAuthor($authors[array_rand($authors)]);
+            //     // Attribution aléatoire d'une catégorie et d'un auteur
+            //     $recipe->setCategory($categories[array_rand($categories)]);
+            //     $recipe->setAuthor($authors[array_rand($authors)]);
 
-        //     // Persister la recette
-        //     $manager->persist($recipe);
-        // }
+            //     // Persister la recette
+            //     $manager->persist($recipe);
+            // }
 
-        // // Sauvegarde de toutes les entités en base de données
-        // $manager->flush();
+            // // Sauvegarde de toutes les entités en base de données
+            // $manager->flush();
+        }
     }
 }
