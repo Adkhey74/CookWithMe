@@ -36,13 +36,13 @@ class RecipeFixtures extends Fixture
         //     $authors[] = $author;
         // }
 
-        // // Création de 20 recettes fictives
-        // for ($i = 1; $i <= 20; $i++) {
-        //     $recipe = new Recipe();
-        //     $recipe->setName('Recipe ' . $i);
-        //     $recipe->setNbLikes(rand(0, 100));  // Nombre de likes aléatoire
-        //     $recipe->setCreatedAt(new \DateTimeImmutable('now'));  // Date actuelle
-        //     $recipe->setUpdatedAt(rand(0, 1) ? new \DateTimeImmutable('now') : null);  // Date de mise à jour aléatoire
+        // Création de 20 recettes fictives
+        for ($i = 1; $i <= 200; $i++) {
+            $recipe = new Recipe();
+            $recipe->setName('Recipe ' . $i);
+            $recipe->setNbLikes(rand(0, 100));  // Nombre de likes aléatoire
+            $recipe->setCreatedAt(new \DateTimeImmutable('now'));  // Date actuelle
+            $recipe->setUpdatedAt(rand(0, 1) ? new \DateTimeImmutable('now') : null);  // Date de mise à jour aléatoire
 
         //     // Attribution aléatoire d'une catégorie et d'un auteur
         //     $recipe->setCategory($categories[array_rand($categories)]);
