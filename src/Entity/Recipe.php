@@ -244,7 +244,7 @@ class Recipe
     {
         if (!$this->recipe_ingredient->contains($recipeIngredient)) {
             $this->recipe_ingredient->add($recipeIngredient);
-            $recipeIngredient->setRecipeId($this);
+            $recipeIngredient->setRecipe($this);
         }
 
         return $this;
@@ -254,8 +254,8 @@ class Recipe
     {
         if ($this->recipe_ingredient->removeElement($recipeIngredient)) {
             // set the owning side to null (unless already changed)
-            if ($recipeIngredient->getRecipeId() === $this) {
-                $recipeIngredient->setRecipeId(null);
+            if ($recipeIngredient->getRecipe() === $this) {
+                $recipeIngredient->setRecipe(null);
             }
         }
 

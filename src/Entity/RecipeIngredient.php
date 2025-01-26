@@ -2,31 +2,49 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RecipeIngredientRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeIngredientRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['recipe_ingredient:read']],
+    denormalizationContext: ['groups' => ['recipe_ingredient:write']],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'recipe' => 'exact'
+])]
 class RecipeIngredient
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
     private ?int $quantity = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
     private ?string $unit = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipe_ingredient')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiProperty(readableLink: true, writableLink: true)]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
     private ?Recipe $recipe = null;
 
     #[ORM\ManyToOne(inversedBy: 'ingredient_recipe')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiProperty(readableLink: true, writableLink: true)]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
     private ?Ingredient $ingredient = null;
 
     public function getId(): ?int
@@ -58,24 +76,24 @@ class RecipeIngredient
         return $this;
     }
 
-    public function getRecipeId(): ?Recipe
+    public function getRecipe(): ?Recipe
     {
         return $this->recipe;
     }
 
-    public function setRecipeId(?Recipe $recipe): static
+    public function setRecipe(?Recipe $recipe): static
     {
         $this->recipe = $recipe;
 
         return $this;
     }
 
-    public function getIngredientId(): ?Ingredient
+    public function getIngredient(): ?Ingredient
     {
         return $this->ingredient;
     }
 
-    public function setIngredientId(?Ingredient $ingredient): static
+    public function setIngredient(?Ingredient $ingredient): static
     {
         $this->ingredient = $ingredient;
 
