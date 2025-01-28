@@ -25,7 +25,7 @@ class FileUploader
       fclose($stream);
     }
 
-    return $path; // Retourne le chemin où le fichier est stocké
+    return $path;
   }
 
   public function delete(string $path): void

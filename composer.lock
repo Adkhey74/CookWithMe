@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5caa8680ca4668a7b547226ad3af0ff",
+    "content-hash": "2db566faaee8d1f5ae01de2a8fa610db",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -2711,16 +2711,16 @@
         },
         {
             "name": "league/flysystem-bundle",
-            "version": "3.3.5",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-bundle.git",
-                "reference": "4fff744a247d360cb7b0b5f641d951f27d37013c"
+                "reference": "6493f7f2ab49bc5817e4b064b9b971d93faabc12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-bundle/zipball/4fff744a247d360cb7b0b5f641d951f27d37013c",
-                "reference": "4fff744a247d360cb7b0b5f641d951f27d37013c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-bundle/zipball/6493f7f2ab49bc5817e4b064b9b971d93faabc12",
+                "reference": "6493f7f2ab49bc5817e4b064b9b971d93faabc12",
                 "shasum": ""
             },
             "require": {
@@ -2743,6 +2743,7 @@
                 "league/flysystem-memory": "^3.1",
                 "league/flysystem-read-only": "^3.15",
                 "league/flysystem-sftp-v3": "^3.1",
+                "league/flysystem-webdav": "^3.29",
                 "symfony/dotenv": "^5.4 || ^6.0 || ^7.0",
                 "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0",
                 "symfony/phpunit-bridge": "^5.4 || ^6.0 || ^7.0",
@@ -2765,12 +2766,18 @@
                     "email": "galopintitouan@gmail.com"
                 }
             ],
-            "description": "Symfony bundle integrating Flysystem into Symfony 5.4+ applications",
+            "description": "Symfony bundle integrating Flysystem into Symfony applications",
+            "keywords": [
+                "Flysystem",
+                "bundle",
+                "filesystem",
+                "symfony"
+            ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-bundle/issues",
-                "source": "https://github.com/thephpleague/flysystem-bundle/tree/3.3.5"
+                "source": "https://github.com/thephpleague/flysystem-bundle/tree/3.4.0"
             },
-            "time": "2024-05-30T20:04:21+00:00"
+            "time": "2025-01-23T18:07:31+00:00"
         },
         {
             "name": "league/flysystem-local",
@@ -2818,6 +2825,54 @@
             ],
             "support": {
                 "source": "https://github.com/thephpleague/flysystem-local/tree/3.29.0"
+            },
+            "time": "2024-08-09T21:24:39+00:00"
+        },
+        {
+            "name": "league/flysystem-memory",
+            "version": "3.29.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem-memory.git",
+                "reference": "219c79ad8b1d614a58ac17b775bfb3a6b7228126"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-memory/zipball/219c79ad8b1d614a58ac17b775bfb3a6b7228126",
+                "reference": "219c79ad8b1d614a58ac17b775bfb3a6b7228126",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "league/flysystem": "^3.0.0",
+                "php": "^8.0.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\InMemory\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frankdejonge.nl"
+                }
+            ],
+            "description": "In-memory filesystem adapter for Flysystem.",
+            "keywords": [
+                "Flysystem",
+                "file",
+                "files",
+                "filesystem",
+                "memory"
+            ],
+            "support": {
+                "source": "https://github.com/thephpleague/flysystem-memory/tree/3.29.0"
             },
             "time": "2024-08-09T21:24:39+00:00"
         },

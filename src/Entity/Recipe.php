@@ -93,6 +93,7 @@ class Recipe
      * @var Collection<int, RecipeIngredient>
      */
     #[ORM\OneToMany(targetEntity: RecipeIngredient::class, mappedBy: 'recipe', orphanRemoval: true)]
+    #[Groups(['recipe:read'])]
     private Collection $recipe_ingredient;
 
     /**

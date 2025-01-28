@@ -35,5 +35,12 @@ services:
     App\State\Processor\RecipeImageProcessor:
         arguments:
             $uploadHandler: '@vich_uploader.upload_handler'
+
+    App\Service\FlysystemStorageAdapter:
+        arguments:
+            $filesystem: '@League\Flysystem\FilesystemOperator $recipeImagesStorage'
+
+    Vich\UploaderBundle\Storage\StorageInterface: '@App\Service\FlysystemStorageAdapter'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

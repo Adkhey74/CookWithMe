@@ -61,6 +61,7 @@ class UserLikeController extends AbstractController
     if ($existingLike) {
       $recipe->removeUserLike($existingLike);
       $entityManager->remove($existingLike);
+      $recipe->setNbLikes($recipe->getNbLikes() - 1);
       $entityManager->flush();
 
       return new JsonResponse(['message' => 'Like removed']);
@@ -69,6 +70,7 @@ class UserLikeController extends AbstractController
     $newLike = new UserLike();
     $newLike->setUser($user);
     $recipe->addUserLike($newLike);
+    $recipe->setNbLikes($recipe->getNbLikes() + 1);
 
     $entityManager->persist($newLike);
     $entityManager->flush();

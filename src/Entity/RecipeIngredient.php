@@ -24,15 +24,15 @@ class RecipeIngredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write', 'recipe:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write', 'recipe:read'])]
     private ?int $quantity = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write', 'recipe:read'])]
     private ?string $unit = null;
 
     #[ORM\ManyToOne(inversedBy: 'recipe_ingredient')]
@@ -44,7 +44,7 @@ class RecipeIngredient
     #[ORM\ManyToOne(inversedBy: 'ingredient_recipe')]
     #[ORM\JoinColumn(nullable: false)]
     #[ApiProperty(readableLink: true, writableLink: true)]
-    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write'])]
+    #[Groups(['recipe_ingredient:read', 'recipe_ingredient:write', 'recipe:read'])]
     private ?Ingredient $ingredient = null;
 
     public function getId(): ?int

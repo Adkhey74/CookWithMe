@@ -20,7 +20,7 @@ class Ingredient
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['ingredient:read', 'recipe_ingredient:read'])]
+    #[Groups(['ingredient:read', 'recipe_ingredient:read', 'recipe:read'])]
     private ?string $name = null;
 
     /**
