@@ -19,3 +19,4 @@
 ###< phpunit/phpunit ###
 
 /mysql
+config/symfony-flysystem.json
