@@ -1,7 +1,7 @@
 # Projet de Site de Recettes
 
-Adil KHADICH: Adil_IUT
-Evan CHAUFFOUR: Evanchauffour
+- Adil KHADICH: Adil_IUT
+- Evan CHAUFFOUR: Evanchauffour
 
 ## Description du Projet
 Ce projet est une application web permettant aux utilisateurs de partager et de découvrir des recettes de cuisine. Il est composé d'un backend développé avec Symfony et API Platform, et d'un frontend réalisé avec Next.js. L'objectif est de permettre aux utilisateurs de :
