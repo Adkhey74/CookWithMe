@@ -1,5 +1,8 @@
 # Projet de Site de Recettes
 
+Adil KHADICH: Adil_IUT
+Evan CHAUFFOUR: Evanchauffour
+
 ## Description du Projet
 Ce projet est une application web permettant aux utilisateurs de partager et de découvrir des recettes de cuisine. Il est composé d'un backend développé avec Symfony et API Platform, et d'un frontend réalisé avec Next.js. L'objectif est de permettre aux utilisateurs de :
 - Créer des recettes avec des images, des ingrédients et des étapes.
@@ -104,6 +107,8 @@ La gestion du stockage des images repose sur plusieurs solutions selon l'environ
     - En **production**, elles sont stockées sur Google Cloud Storage.
   - Cependant, l'URL générée pour récupérer ces images n'est pas correcte, ce qui empêche le frontend de les afficher correctement.
 
+> **Note :** Le fichier de configuration contenant les credentials de Google Cloud Storage (`config/symfony-flysystem.json`) n'a pas été partagé dans le dépôt pour des raisons de sécurité. Cependant, l'upload fonctionne bien et peut être configuré en fournissant un fichier de configuration valide.
+
 ### Lancer l'Application en Mode Production
 1. Les fichiers `.env` nécessaires pour la production sont déjà inclus dans le projet.
 2. Nettoyer et optimiser le cache :
@@ -129,13 +134,13 @@ La gestion du stockage des images repose sur plusieurs solutions selon l'environ
   - Un problème identifié est l'absence de résolution dynamique de l'URL des fichiers en fonction de l’environnement, empêchant le frontend d'afficher correctement les images.
 
 ## Apprentissage et Difficultés
-N’étant pas habitués à Symfony, ce projet nous a permis de découvrir une nouvelle manière de développer. Cependant, nous avons eu beaucoup de mal à nous adapter à ce framework, notamment en raison de sa courbe d’apprentissage élevée et du peu de temps disponible pour approfondir notre compréhension. Nous aurions aimé fournir un travail plus abouti, mais le manque de temps nous a empêchés de résoudre tous les défis techniques rencontrés, notamment sur l’intégration de Flysystem avec VichUploader.
+N’étant pas habitués à Symfony, ce projet nous a permis de découvrir une nouvelle manière de développer. Nous avons appris à manipuler les entités, les relations et la gestion des images avec Flysystem et VichUploader, tout en intégrant un frontend moderne avec Next.js.
 
 ## Lien des Repositories
 - **Backend :** [Lien du repo backend](https://github.com/Adkhey74/CookWithMe.git)
 - **Frontend :** [Lien du repo frontend](https://github.com/Evanchauffour/CookWithMeFront.git)
 
 ## Conclusion
-Ce projet nous a permis de découvrir Symfony et API Platform, malgré notre absence d'expérience avec PHP. Nous avons appris à manipuler les entités, les relations et la gestion des images avec Flysystem et VichUploader, tout en intégrant un frontend moderne avec Next.js. Bien que nous ayons rencontré des difficultés techniques, cette expérience nous a permis d’acquérir de nouvelles compétences et de mieux comprendre le développement avec Symfony.
+Ce projet nous a permis de découvrir Symfony et API Platform. Nous avons appris à manipuler les entités, les relations et la gestion des images avec Flysystem et VichUploader, tout en intégrant un frontend moderne avec Next.js. Cette expérience nous a permis d’acquérir de nouvelles compétences et de mieux comprendre le développement avec Symfony.
 
 
