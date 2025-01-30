@@ -42,5 +42,12 @@ services:
 
     Vich\UploaderBundle\Storage\StorageInterface: '@App\Service\FlysystemStorageAdapter'
 
+    Google\Cloud\Storage\StorageClient:
+        arguments:
+            - keyFilePath: '%kernel.project_dir%/%env(GOOGLE_CLOUD_CREDENTIALS)%'
+
+    gcloud_client_service:
+        alias: Google\Cloud\Storage\StorageClient
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

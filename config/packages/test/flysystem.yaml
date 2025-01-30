@@ -1,0 +1,4 @@
+flysystem:
+    storages:
+        recipe_images_storage:
+            adapter: memory

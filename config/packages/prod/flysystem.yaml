@@ -1,0 +1,8 @@
+flysystem:
+    storages:
+        recipe_images_storage:
+            adapter: gcloud
+            options:
+                client: 'gcloud_client_service' # The service ID of the Google\Cloud\Storage\StorageClient instance
+                bucket: 'cook_with_me_images'
+
